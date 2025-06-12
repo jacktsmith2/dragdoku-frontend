@@ -1,14 +1,13 @@
-@@ -1,7 +1,8 @@
 /* style.css */
 body {
   font-family: sans-serif;
-  padding: 20px;
   text-align: center;
   padding: 20px;
 }
 
 #grid-container {
-@@ -10,47 +11,90 @@ body {
+  display: grid;
+  grid-template-columns: repeat(4, 100px);
   grid-template-rows: repeat(4, 100px);
   gap: 5px;
   justify-content: center;
@@ -21,15 +20,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f4f4f4;
-  cursor: pointer;
   font-size: 12px;
   cursor: pointer;
   overflow: hidden;
 }
 
 .label {
-  background: #ddd;
   font-weight: bold;
   background: #ddd;
 }
@@ -41,8 +37,6 @@ body {
   border-radius: 4px;
 }
 
-.correct {
-  border: 3px solid green;
 /* Modal styles */
 .modal {
   position: fixed;
@@ -56,13 +50,9 @@ body {
   z-index: 9999;
 }
 
-.incorrect {
-  border: 3px solid red;
 .modal.hidden {
   display: none;
 }
-#guess-section {
-  margin-top: 20px;
 
 .modal-content {
   background: white;
@@ -73,17 +63,13 @@ body {
   text-align: center;
 }
 
-#queen-input {
 .modal-content input[type="text"] {
   width: 80%;
   padding: 8px;
   font-size: 16px;
-  width: 200px;
   margin-bottom: 10px;
 }
 
-#selected-cell {
-  font-weight: bold;
 #suggestions {
   max-height: 100px;
   overflow-y: auto;
@@ -110,5 +96,5 @@ button {
 .close {
   float: right;
   font-size: 20px;
-  cursor: pointer;Add commentMore actions
+  cursor: pointer;
 }
