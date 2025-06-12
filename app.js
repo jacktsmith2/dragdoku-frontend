@@ -18,13 +18,28 @@ for (let row = 0; row < 3; row++) {
 
   for (let col = 0; col < 3; col++) {
     const cellId = `cell-${row}-${col}`;
-    grid.innerHTML += `<div class="cell" id="${cellId}" onclick="sendGuess(${row}, ${col})"></div>`;
+    grid.innerHTML += `<div class="cell" id="${cellId}" onclick="selectCell(${row}, ${col})"></div>`;
   }
 }
 
-function sendGuess(row, col) {
-  const cell = document.getElementById(`cell-${row}-${col}`);
-  const name = prompt("Enter queen name:");
+let selectedRow = null;
+let selectedCol = null;
+
+function selectCell(row, col) {
+  selectedRow = row;
+  selectedCol = col;
+  document.getElementById("selected-cell").textContent = `${rowLabels[row]} x ${colLabels[col]}`;
+  document.getElementById("queen-input").focus();
+}
+
+function submitGuess() {
+  const name = document.getElementById("queen-input").value.trim();
+  if (!name || selectedRow === null || selectedCol === null) {
+    alert("Please select a cell and enter a name.");
+    return;
+  }
+
+  const cell = document.getElementById(`cell-${selectedRow}-${selectedCol}`);
 
   // FOR NOW — placeholder image
   const img = document.createElement("img");
@@ -32,4 +47,10 @@ function sendGuess(row, col) {
   img.className = "queen-img correct";
   cell.innerHTML = "";
   cell.appendChild(img);
+
+  // Reset
+  document.getElementById("queen-input").value = "";
+  selectedRow = null;
+  selectedCol = null;
+  document.getElementById("selected-cell").textContent = "None";
 }
