@@ -1,18 +1,28 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>DragDoku</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>👑 DragDoku</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>DragDoku</h1>
+  <h1>👑 DragDoku</h1>
   <div id="grid-container"></div>
+
+  <!-- Modal Guess Box -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2>Make your guess</h2>
+      <p id="modal-clue"></p>
+      <input type="text" id="queen-input" placeholder="Search queen..." oninput="filterQueens()">
+      <div id="suggestions"></div>
+      <button onclick="submitGuess()">Submit</button>
+      <p id="guess-message"></p>
+    </div>
+  </div>
+
   <script src="app.js"></script>
-  <div id="guess-section">
-  <p>Selected cell: <span id="selected-cell">None</span></p>
-  <input type="text" id="queen-input" placeholder="Enter queen's name">
-  <button onclick="submitGuess()">Submit Guess</button>
-</div>
 </body>
 </html>
