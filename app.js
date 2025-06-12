@@ -1,28 +1,34 @@
-@@ -1,56 +1,75 @@
 // app.js
 
-const rowLabels = ["Snatch Winner", "Finale Queen", "1 Lipsync Win"];
-const colLabels = ["Season 5", "2+ Maxi Wins", "1 Mini Win"];Add commentMore actions
+const rowLabels = [
+  { label: "Snatch Winner", note: "A queen who won the Snatch Game challenge." },
+  { label: "Finale Queen", note: "A queen that made it to the final competitive episode without being eliminated." },
+  { label: "1 Lipsync Win", note: "A queen with exactly one lipsync win." }
+];
+
+const colLabels = [
+  { label: "Season 5", note: "Queens who competed in Season 5." },
+  { label: "2+ Maxi Wins", note: "Queens with two or more maxi challenge wins." },
+  { label: "1 Mini Win", note: "Queens with exactly one mini challenge win." }
+];
+
 const VALID_QUEENS = ["Bosco", "Q", "Utica Queen"];
 
-// build the grid
 const grid = document.getElementById("grid-container");
 
 // top-left corner blank
 grid.innerHTML += `<div class="cell label"></div>`;
 
 // column headers
-colLabels.forEach(label => {
-  grid.innerHTML += `<div class="cell label">${label}</div>`;
+colLabels.forEach((item, colIndex) => {
+  grid.innerHTML += `<div class="cell label clickable" onclick="showNote('${item.label}', '${item.note}')">${item.label}</div>`;
 });
 
 for (let row = 0; row < 3; row++) {
-  // row header
-  grid.innerHTML += `<div class="cell label">${rowLabels[row]}</div>`;
+  grid.innerHTML += `<div class="cell label clickable" onclick="showNote('${rowLabels[row].label}', '${rowLabels[row].note}')">${rowLabels[row].label}</div>`;
 
   for (let col = 0; col < 3; col++) {
     const cellId = `cell-${row}-${col}`;
-    grid.innerHTML += `<div class="cell" id="${cellId}" onclick="selectCell(${row}, ${col})"></div>`;
     grid.innerHTML += `<div class="cell" id="${cellId}" onclick="openModal(${row}, ${col})"></div>`;
   }
 }
@@ -30,21 +36,19 @@ for (let row = 0; row < 3; row++) {
 let selectedRow = null;
 let selectedCol = null;
 
-function selectCell(row, col) {
 function openModal(row, col) {
   selectedRow = row;
   selectedCol = col;
-  document.getElementById("selected-cell").textContent = `${rowLabels[row]} x ${colLabels[col]}`;
-  document.getElementById("queen-input").focus();
   document.getElementById("modal").classList.remove("hidden");
   document.getElementById("queen-input").value = "";
   document.getElementById("suggestions").innerHTML = "";
   document.getElementById("guess-message").textContent = "";
-  document.getElementById("modal-clue").textContent = `${rowLabels[row]} x ${colLabels[col]}`;
+  document.getElementById("modal-clue").textContent = `${rowLabels[row].label} x ${colLabels[col].label}`;
 }
 
 function closeModal() {
   document.getElementById("modal").classList.add("hidden");
+  document.getElementById("note-modal").classList.add("hidden");
 }
 
 function filterQueens() {
@@ -65,8 +69,6 @@ function filterQueens() {
 
 function submitGuess() {
   const name = document.getElementById("queen-input").value.trim();
-  if (!name || selectedRow === null || selectedCol === null) {
-    alert("Please select a cell and enter a name.");
   const msg = document.getElementById("guess-message");
   const cell = document.getElementById(`cell-${selectedRow}-${selectedCol}`);
 
@@ -75,21 +77,17 @@ function submitGuess() {
     return;
   }
 
-  const cell = document.getElementById(`cell-${selectedRow}-${selectedCol}`);
-
-  // FOR NOW — placeholder image
   const img = document.createElement("img");
-  img.src = "https://upload.wikimedia.org/wikipedia/en/4/4f/RuPaul_2011.jpg";
-  img.className = "queen-img correct";
   img.src = "https://upload.wikimedia.org/wikipedia/en/4/4f/RuPaul_2011.jpg"; // Placeholder
   img.className = "queen-img";
   cell.innerHTML = "";
   cell.appendChild(img);
 
-  // Reset
-  document.getElementById("queen-input").value = "";
-  selectedRow = null;
-  selectedCol = null;
-  document.getElementById("selected-cell").textContent = "None";
   closeModal();
+}
+
+function showNote(title, note) {
+  document.getElementById("note-modal-title").textContent = title;
+  document.getElementById("note-modal-text").textContent = note;
+  document.getElementById("note-modal").classList.remove("hidden");
 }
