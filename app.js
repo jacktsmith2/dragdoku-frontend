@@ -13,21 +13,33 @@ const CRITERIA_NOTES = {
 
 const grid = document.getElementById("grid-container");
 
-// top-left corner blank
+// Top-left corner blank
 grid.innerHTML += `<div class="cell label"></div>`;
 
-// column headers (make clickable)
-colLabels.forEach(label => {
-  grid.innerHTML += `<div class="cell label" onclick="showNote('${label}', CRITERIA_NOTES['${label}'])">${label}</div>`;
+// Column headers — labels with clickable explanations
+colLabels.forEach((label, col) => {
+  const cell = document.createElement("div");
+  cell.className = "cell label";
+  cell.textContent = label;
+  cell.onclick = () => showNote(label, CRITERIA_NOTES[label]);
+  grid.appendChild(cell);
 });
 
-// row headers and grid cells
+// Row headers and main cells
 for (let row = 0; row < 3; row++) {
-  grid.innerHTML += `<div class="cell label" onclick="showNote('${rowLabels[row]}', CRITERIA_NOTES['${rowLabels[row]}'])">${rowLabels[row]}</div>`;
+  const rowLabel = document.createElement("div");
+  rowLabel.className = "cell label";
+  rowLabel.textContent = rowLabels[row];
+  rowLabel.onclick = () => showNote(rowLabels[row], CRITERIA_NOTES[rowLabels[row]]);
+  grid.appendChild(rowLabel);
 
   for (let col = 0; col < 3; col++) {
     const cellId = `cell-${row}-${col}`;
-    grid.innerHTML += `<div class="cell" id="${cellId}" onclick="openModal(${row}, ${col})"></div>`;
+    const cell = document.createElement("div");
+    cell.className = "cell";
+    cell.id = cellId;
+    cell.onclick = () => openModal(row, col);
+    grid.appendChild(cell);
   }
 }
 
@@ -52,6 +64,10 @@ function showNote(title, note) {
   document.getElementById("note-title").textContent = title;
   document.getElementById("note-text").textContent = note;
   document.getElementById("note-modal").classList.remove("hidden");
+}
+
+function closeNote() {
+  document.getElementById("note-modal").classList.add("hidden");
 }
 
 function filterQueens() {
