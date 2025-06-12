@@ -40,3 +40,17 @@ body {
 .incorrect {
   border: 3px solid red;
 }
+#guess-section {
+  margin-top: 20px;
+  text-align: center;
+}
+
+#queen-input {
+  padding: 8px;
+  font-size: 16px;
+  width: 200px;
+}
+
+#selected-cell {
+  font-weight: bold;
+}
