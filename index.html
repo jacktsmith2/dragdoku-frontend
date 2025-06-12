@@ -1,20 +1,36 @@
-<!-- Guess modal (already in your setup) -->
-<div id="modal" class="modal hidden">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <h2 id="modal-clue">Clue</h2>
-    <input type="text" id="queen-input" placeholder="Start typing..." oninput="filterQueens()">
-    <div id="suggestions"></div>
-    <button onclick="submitGuess()">Submit</button>
-    <p id="guess-message"></p>
-  </div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DragDoku</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>👑 DragDoku</h1>
+  <div id="grid-container" class="grid"></div>
 
-<!-- Info note modal -->
-<div id="note-modal" class="modal hidden">
-  <div class="modal-content">
-    <span class="close" onclick="document.getElementById('note-modal').classList.add('hidden')">&times;</span>
-    <h2 id="note-title">Criterion</h2>
-    <p id="note-text">Description goes here.</p>
+  <!-- Queen Guess Modal -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div id="modal-clue" class="modal-clue">Row x Column</div>
+      <input type="text" id="queen-input" placeholder="Enter queen name..." oninput="filterQueens()" />
+      <div id="suggestions" class="suggestions"></div>
+      <button onclick="submitGuess()">Submit</button>
+      <div id="guess-message" class="message"></div>
+    </div>
   </div>
-</div>
+
+  <!-- Criteria Note Modal -->
+  <div id="note-modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close" onclick="closeNoteModal()">&times;</span>
+      <div id="note-title" class="modal-clue">Criteria Title</div>
+      <p id="note-text" class="note-text">Explanation goes here.</p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
