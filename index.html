@@ -1,33 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>DragDoku</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>👑 DragDoku</h1>
   <div id="grid-container" class="grid"></div>
 
-  <!-- Queen Guess Modal -->
+  <!-- Guess Modal -->
   <div id="modal" class="modal hidden">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
-      <div id="modal-clue" class="modal-clue">Row x Column</div>
-      <input type="text" id="queen-input" placeholder="Enter queen name..." oninput="filterQueens()" />
+      <div id="modal-clue"></div>
+      <input type="text" id="queen-input" placeholder="Start typing a queen..." oninput="filterQueens()">
       <div id="suggestions" class="suggestions"></div>
       <button onclick="submitGuess()">Submit</button>
-      <div id="guess-message" class="message"></div>
+      <div id="guess-message"></div>
     </div>
   </div>
 
-  <!-- Criteria Note Modal -->
-  <div id="note-modal" class="modal hidden">
+  <!-- Criteria Info Modal -->
+  <div id="info-modal" class="modal hidden">
     <div class="modal-content">
-      <span class="close" onclick="closeNoteModal()">&times;</span>
-      <div id="note-title" class="modal-clue">Criteria Title</div>
-      <p id="note-text" class="note-text">Explanation goes here.</p>
+      <span class="close" onclick="closeInfoModal()">&times;</span>
+      <div id="info-text"></div>
     </div>
   </div>
 
