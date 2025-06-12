@@ -1,28 +1,20 @@
-<!-- index.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>👑 DragDoku</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1>👑 DragDoku</h1>
-  <div id="grid-container"></div>
-
-  <!-- Modal Guess Box -->
-  <div id="modal" class="modal hidden">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
-      <h2>Make your guess</h2>
-      <p id="modal-clue"></p>
-      <input type="text" id="queen-input" placeholder="Search queen..." oninput="filterQueens()">
-      <div id="suggestions"></div>
-      <button onclick="submitGuess()">Submit</button>
-      <p id="guess-message"></p>
-    </div>
+<!-- Guess modal (already in your setup) -->
+<div id="modal" class="modal hidden">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2 id="modal-clue">Clue</h2>
+    <input type="text" id="queen-input" placeholder="Start typing..." oninput="filterQueens()">
+    <div id="suggestions"></div>
+    <button onclick="submitGuess()">Submit</button>
+    <p id="guess-message"></p>
   </div>
+</div>
 
-  <script src="app.js"></script>
-</body>
-</html>
+<!-- Info note modal -->
+<div id="note-modal" class="modal hidden">
+  <div class="modal-content">
+    <span class="close" onclick="document.getElementById('note-modal').classList.add('hidden')">&times;</span>
+    <h2 id="note-title">Criterion</h2>
+    <p id="note-text">Description goes here.</p>
+  </div>
+</div>
