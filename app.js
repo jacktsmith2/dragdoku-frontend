@@ -1,54 +1,41 @@
+@@ -1,56 +1,75 @@
+// app.js
+
 const rowLabels = ["Snatch Winner", "Finale Queen", "1 Lipsync Win"];
-const colLabels = ["Season 5", "2+ Maxi Wins", "1 Mini Win"];
+const colLabels = ["Season 5", "2+ Maxi Wins", "1 Mini Win"];Add commentMore actions
 const VALID_QUEENS = ["Bosco", "Q", "Utica Queen"];
 
-const CRITERIA_NOTES = {
-  "Snatch Winner": "A queen who won the Snatch Game challenge.",
-  "Finale Queen": "A queen that made it to the final competitive episode without being eliminated.",
-  "1 Lipsync Win": "A queen who has won exactly one lip sync.",
-  "Season 5": "A queen who competed in Season 5 of RuPaul's Drag Race.",
-  "2+ Maxi Wins": "A queen who has won two or more main challenges.",
-  "1 Mini Win": "A queen who has won exactly one mini challenge."
-};
-
+// build the grid
 const grid = document.getElementById("grid-container");
 
-// Top-left corner blank
+// top-left corner blank
 grid.innerHTML += `<div class="cell label"></div>`;
 
-// Column headers — labels with clickable explanations
-colLabels.forEach((label, col) => {
-  const cell = document.createElement("div");
-  cell.className = "cell label";
-  cell.textContent = label;
-  cell.onclick = () => showNote(label, CRITERIA_NOTES[label]);
-  grid.appendChild(cell);
+// column headers
+colLabels.forEach(label => {
+  grid.innerHTML += `<div class="cell label">${label}</div>`;
 });
 
-// Row headers and main cells
 for (let row = 0; row < 3; row++) {
-  const rowLabel = document.createElement("div");
-  rowLabel.className = "cell label";
-  rowLabel.textContent = rowLabels[row];
-  rowLabel.onclick = () => showNote(rowLabels[row], CRITERIA_NOTES[rowLabels[row]]);
-  grid.appendChild(rowLabel);
+  // row header
+  grid.innerHTML += `<div class="cell label">${rowLabels[row]}</div>`;
 
   for (let col = 0; col < 3; col++) {
     const cellId = `cell-${row}-${col}`;
-    const cell = document.createElement("div");
-    cell.className = "cell";
-    cell.id = cellId;
-    cell.onclick = () => openModal(row, col);
-    grid.appendChild(cell);
+    grid.innerHTML += `<div class="cell" id="${cellId}" onclick="selectCell(${row}, ${col})"></div>`;
+    grid.innerHTML += `<div class="cell" id="${cellId}" onclick="openModal(${row}, ${col})"></div>`;
   }
 }
 
 let selectedRow = null;
 let selectedCol = null;
 
+function selectCell(row, col) {
 function openModal(row, col) {
   selectedRow = row;
   selectedCol = col;
+  document.getElementById("selected-cell").textContent = `${rowLabels[row]} x ${colLabels[col]}`;
+  document.getElementById("queen-input").focus();
   document.getElementById("modal").classList.remove("hidden");
   document.getElementById("queen-input").value = "";
   document.getElementById("suggestions").innerHTML = "";
@@ -58,16 +45,6 @@ function openModal(row, col) {
 
 function closeModal() {
   document.getElementById("modal").classList.add("hidden");
-}
-
-function showNote(title, note) {
-  document.getElementById("note-title").textContent = title;
-  document.getElementById("note-text").textContent = note;
-  document.getElementById("note-modal").classList.remove("hidden");
-}
-
-function closeNote() {
-  document.getElementById("note-modal").classList.add("hidden");
 }
 
 function filterQueens() {
@@ -88,6 +65,8 @@ function filterQueens() {
 
 function submitGuess() {
   const name = document.getElementById("queen-input").value.trim();
+  if (!name || selectedRow === null || selectedCol === null) {
+    alert("Please select a cell and enter a name.");
   const msg = document.getElementById("guess-message");
   const cell = document.getElementById(`cell-${selectedRow}-${selectedCol}`);
 
@@ -96,11 +75,21 @@ function submitGuess() {
     return;
   }
 
+  const cell = document.getElementById(`cell-${selectedRow}-${selectedCol}`);
+
+  // FOR NOW — placeholder image
   const img = document.createElement("img");
+  img.src = "https://upload.wikimedia.org/wikipedia/en/4/4f/RuPaul_2011.jpg";
+  img.className = "queen-img correct";
   img.src = "https://upload.wikimedia.org/wikipedia/en/4/4f/RuPaul_2011.jpg"; // Placeholder
   img.className = "queen-img";
   cell.innerHTML = "";
   cell.appendChild(img);
 
+  // Reset
+  document.getElementById("queen-input").value = "";
+  selectedRow = null;
+  selectedCol = null;
+  document.getElementById("selected-cell").textContent = "None";
   closeModal();
 }
