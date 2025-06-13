@@ -98,3 +98,19 @@ button {
   font-size: 20px;
   cursor: pointer;
 }
+.guess-label {
+  font-weight: bold;
+  font-size: 14px;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+.guess-label.correct {
+  background-color: #c7f5cb;
+  color: #1b6e2d;
+}
+
+.guess-label.incorrect {
+  background-color: #f5c7c7;
+  color: #a11b1b;
+}
