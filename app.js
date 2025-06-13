@@ -28,6 +28,7 @@ Promise.all([
   renderGrid();
 })
 .catch(err => {
+  alert("Error loading grid or queen list. Check backend.");
   console.error("Error loading grid or queen list:", err);
 });
 
