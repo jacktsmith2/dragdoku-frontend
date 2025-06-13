@@ -10,24 +10,24 @@ Promise.all([
   fetch("https://dragdoku-backend.onrender.com/grid").then(res => res.json()),
   fetch("https://dragdoku-backend.onrender.com/queens").then(res => res.json())
 ])
-.then(([gridData, queenList]) => {
-  rowLabels = gridData.rows.map((label, i) => ({
-    label,
-    note: gridData.row_desc[i]
-  }));
+  .then(([gridData, queenList]) => {
+    rowLabels = gridData.rows.map((label, i) => ({
+      label,
+      note: gridData.row_desc[i]
+    }));
 
-  colLabels = gridData.cols.map((label, i) => ({
-    label,
-    note: gridData.col_desc[i]
-  }));
+    colLabels = gridData.cols.map((label, i) => ({
+      label,
+      note: gridData.col_desc[i]
+    }));
 
-  queenNames = queenList;
+    queenNames = queenList;
 
-  renderGrid();
-})
-.catch(err => {
-  console.error("Error loading grid or queen list:", err);
-});
+    renderGrid();
+  })
+  .catch(err => {
+    console.error("Error loading grid or queen list:", err);
+  });
 
 // Render the grid
 function renderGrid() {
@@ -64,6 +64,14 @@ function closeModal() {
   document.getElementById("modal").classList.add("hidden");
   document.getElementById("note-modal").classList.add("hidden");
 }
+
+function normalize(str) {
+  return str
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, ""); // Remove accents
+}
+
 function levenshteinDistance(a, b) {
   const matrix = Array.from({ length: b.length + 1 }, (_, i) =>
     Array.from({ length: a.length + 1 }, (_, j) =>
@@ -75,17 +83,18 @@ function levenshteinDistance(a, b) {
     for (let j = 1; j <= a.length; j++) {
       const cost = a[j - 1] === b[i - 1] ? 0 : 1;
       matrix[i][j] = Math.min(
-        matrix[i - 1][j] + 1,       // deletion
-        matrix[i][j - 1] + 1,       // insertion
-        matrix[i - 1][j - 1] + cost // substitution
+        matrix[i - 1][j] + 1,
+        matrix[i][j - 1] + 1,
+        matrix[i - 1][j - 1] + cost
       );
     }
   }
 
   return matrix[b.length][a.length];
 }
+
 function filterQueens() {
-  const input = document.getElementById("queen-input").value.toLowerCase();
+  const input = normalize(document.getElementById("queen-input").value);
   const suggestions = document.getElementById("suggestions");
   suggestions.innerHTML = "";
 
@@ -93,12 +102,12 @@ function filterQueens() {
 
   const distances = queenNames.map(name => ({
     name,
-    distance: levenshteinDistance(input, name.toLowerCase())
+    distance: levenshteinDistance(input, normalize(name))
   }));
 
   distances
     .sort((a, b) => a.distance - b.distance)
-    .slice(0, 5)  // top 5 matches
+    .slice(0, 5)
     .forEach(({ name }) => {
       const div = document.createElement("div");
       div.textContent = name;
