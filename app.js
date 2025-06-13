@@ -64,15 +64,42 @@ function closeModal() {
   document.getElementById("modal").classList.add("hidden");
   document.getElementById("note-modal").classList.add("hidden");
 }
+function levenshteinDistance(a, b) {
+  const matrix = Array.from({ length: b.length + 1 }, (_, i) =>
+    Array.from({ length: a.length + 1 }, (_, j) =>
+      i === 0 ? j : j === 0 ? i : 0
+    )
+  );
 
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      const cost = a[j - 1] === b[i - 1] ? 0 : 1;
+      matrix[i][j] = Math.min(
+        matrix[i - 1][j] + 1,       // deletion
+        matrix[i][j - 1] + 1,       // insertion
+        matrix[i - 1][j - 1] + cost // substitution
+      );
+    }
+  }
+
+  return matrix[b.length][a.length];
+}
 function filterQueens() {
   const input = document.getElementById("queen-input").value.toLowerCase();
   const suggestions = document.getElementById("suggestions");
   suggestions.innerHTML = "";
 
-  queenNames
-    .filter(name => name.toLowerCase().includes(input))
-    .forEach(name => {
+  if (!input) return;
+
+  const distances = queenNames.map(name => ({
+    name,
+    distance: levenshteinDistance(input, name.toLowerCase())
+  }));
+
+  distances
+    .sort((a, b) => a.distance - b.distance)
+    .slice(0, 5)  // top 5 matches
+    .forEach(({ name }) => {
       const div = document.createElement("div");
       div.textContent = name;
       div.onclick = () => {
