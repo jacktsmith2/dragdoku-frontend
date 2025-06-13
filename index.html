@@ -1,5 +1,6 @@
 <!-- index.html -->
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>👑 DragDoku</title>
@@ -7,7 +8,11 @@
 </head>
 <body>
   <h1>👑 DragDoku</h1>
-  <div id="grid-container"></div>  <!-- Modal Guess Box -->  <div id="modal" class="modal hidden">
+
+  <div id="grid-container"></div>
+
+  <!-- Modal Guess Box -->
+  <div id="modal" class="modal hidden">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
       <h2>Make your guess</h2>
@@ -17,11 +22,18 @@
       <button onclick="submitGuess()">Submit</button>
       <p id="guess-message"></p>
     </div>
-  </div>  <!-- Modal Info Box -->  <div id="note-modal" class="modal hidden">
+  </div>
+
+  <!-- Modal Info Box -->
+  <div id="note-modal" class="modal hidden">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
       <h2 id="note-modal-title">Info</h2>
       <p id="note-modal-text">Explanation goes here</p>
     </div>
-  </div>  <script src="app.js"></script></body>
+  </div>
+
+  <!-- JavaScript should load after elements are ready -->
+  <script src="app.js"></script>
+</body>
 </html>
