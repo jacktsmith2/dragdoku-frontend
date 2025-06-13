@@ -4,7 +4,7 @@ let selectedCol = null;
 let rowLabels = [];
 let colLabels = [];
 let queenNames = [];
-let usedQueens = new Set();  // ✅ Track used names
+let usedQueens = new Set(); // ✅ Track used names
 
 // Fetch grid and queen list
 Promise.all([
@@ -31,13 +31,17 @@ Promise.all([
 
 function renderGrid() {
   grid.innerHTML = "";
-  grid.innerHTML += `<div class="cell label"></div>`;
 
+  // ✅ top-left cell - invisible and non-clickable
+  grid.innerHTML += `<div class="cell label top-left"></div>`;
+
+  // Column headers
   colLabels.forEach(item => {
     grid.innerHTML += `<div class="cell label clickable" onclick="showNote('${item.label}', '${item.note}')">${item.label}</div>`;
   });
 
   for (let row = 0; row < 3; row++) {
+    // Row header
     grid.innerHTML += `<div class="cell label clickable" onclick="showNote('${rowLabels[row].label}', '${rowLabels[row].note}')">${rowLabels[row].label}</div>`;
     for (let col = 0; col < 3; col++) {
       const cellId = `cell-${row}-${col}`;
@@ -149,7 +153,6 @@ function submitGuess() {
       const isCorrect = result.valid;
       const imageUrl = result.image;
 
-      // ✅ Mark as used if correct
       if (isCorrect && imageUrl) {
         usedQueens.add(name);
 
