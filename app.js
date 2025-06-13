@@ -4,6 +4,7 @@ let selectedCol = null;
 let rowLabels = [];
 let colLabels = [];
 let queenNames = [];
+let usedQueens = new Set();  // ✅ Track used names
 
 // Fetch grid and queen list
 Promise.all([
@@ -22,21 +23,16 @@ Promise.all([
     }));
 
     queenNames = queenList;
-
     renderGrid();
   })
   .catch(err => {
     console.error("Error loading grid or queen list:", err);
   });
 
-// Render the grid
 function renderGrid() {
   grid.innerHTML = "";
-
-  // top-left blank corner
   grid.innerHTML += `<div class="cell label"></div>`;
 
-  // column headers
   colLabels.forEach(item => {
     grid.innerHTML += `<div class="cell label clickable" onclick="showNote('${item.label}', '${item.note}')">${item.label}</div>`;
   });
@@ -66,10 +62,7 @@ function closeModal() {
 }
 
 function normalize(str) {
-  return str
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, ""); // Remove accents
+  return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
 function levenshteinDistance(a, b) {
@@ -78,7 +71,6 @@ function levenshteinDistance(a, b) {
       i === 0 ? j : j === 0 ? i : 0
     )
   );
-
   for (let i = 1; i <= b.length; i++) {
     for (let j = 1; j <= a.length; j++) {
       const cost = a[j - 1] === b[i - 1] ? 0 : 1;
@@ -89,7 +81,6 @@ function levenshteinDistance(a, b) {
       );
     }
   }
-
   return matrix[b.length][a.length];
 }
 
@@ -100,23 +91,36 @@ function filterQueens() {
 
   if (!input) return;
 
-  const distances = queenNames.map(name => ({
-    name,
-    distance: levenshteinDistance(input, normalize(name))
-  }));
+  // Exclude used queens
+  const available = queenNames.filter(name => !usedQueens.has(name));
 
-  distances
-    .sort((a, b) => a.distance - b.distance)
-    .slice(0, 5)
-    .forEach(({ name }) => {
-      const div = document.createElement("div");
-      div.textContent = name;
-      div.onclick = () => {
-        document.getElementById("queen-input").value = name;
-        suggestions.innerHTML = "";
-      };
-      suggestions.appendChild(div);
-    });
+  // Try direct substring match
+  const substringMatches = available.filter(name =>
+    normalize(name).includes(input)
+  );
+
+  let finalList = substringMatches;
+
+  if (finalList.length === 0) {
+    finalList = available
+      .map(name => ({
+        name,
+        distance: levenshteinDistance(input, normalize(name))
+      }))
+      .sort((a, b) => a.distance - b.distance)
+      .slice(0, 5)
+      .map(entry => entry.name);
+  }
+
+  finalList.forEach(name => {
+    const div = document.createElement("div");
+    div.textContent = name;
+    div.onclick = () => {
+      document.getElementById("queen-input").value = name;
+      suggestions.innerHTML = "";
+    };
+    suggestions.appendChild(div);
+  });
 }
 
 function submitGuess() {
@@ -145,7 +149,10 @@ function submitGuess() {
       const isCorrect = result.valid;
       const imageUrl = result.image;
 
+      // ✅ Mark as used if correct
       if (isCorrect && imageUrl) {
+        usedQueens.add(name);
+
         cell.innerHTML = `
           <div class='img-wrapper'>
             <img src='${imageUrl}' alt='${name}' class='queen-img'/>
