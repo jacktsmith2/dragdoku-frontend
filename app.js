@@ -1,5 +1,3 @@
-// app.js (live backend version with dynamic queen list)
-
 const grid = document.getElementById("grid-container");
 let selectedRow = null;
 let selectedCol = null;
@@ -28,7 +26,6 @@ Promise.all([
   renderGrid();
 })
 .catch(err => {
-  alert("Error loading grid or queen list. Check backend.");
   console.error("Error loading grid or queen list:", err);
 });
 
@@ -44,7 +41,6 @@ function renderGrid() {
     grid.innerHTML += `<div class="cell label clickable" onclick="showNote('${item.label}', '${item.note}')">${item.label}</div>`;
   });
 
-  // rows and grid cells
   for (let row = 0; row < 3; row++) {
     grid.innerHTML += `<div class="cell label clickable" onclick="showNote('${rowLabels[row].label}', '${rowLabels[row].note}')">${rowLabels[row].label}</div>`;
     for (let col = 0; col < 3; col++) {
@@ -111,7 +107,18 @@ function submitGuess() {
     .then(res => res.json())
     .then(result => {
       const isCorrect = result.valid;
-      cell.innerHTML = `<div class='guess-label ${isCorrect ? "correct" : "incorrect"}'>${name}</div>`;
+      const imageUrl = result.image;
+
+      if (isCorrect && imageUrl) {
+        cell.innerHTML = `
+          <div class='img-wrapper'>
+            <img src='${imageUrl}' alt='${name}' class='queen-img'/>
+            <div class='overlay-name'>${name}</div>
+          </div>`;
+      } else {
+        cell.innerHTML = `<div class='guess-label incorrect'>${name}</div>`;
+      }
+
       closeModal();
     })
     .catch(() => {
